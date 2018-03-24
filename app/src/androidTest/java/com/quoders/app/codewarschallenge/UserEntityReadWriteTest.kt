@@ -7,9 +7,8 @@ import android.support.test.runner.AndroidJUnit4
 import com.quoders.app.codewarschallenge.data.local.database.CodewarsDatabase
 import com.quoders.app.codewarschallenge.data.local.database.UserDao
 import com.quoders.app.codewarschallenge.data.local.entities.UserEntity
-import junit.framework.Assert.assertEquals
+import junit.framework.Assert.*
 
-import junit.framework.Assert.assertTrue
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -62,5 +61,32 @@ class UserEntityReadWriteTest {
         assertEquals(allUsers[1].clan,"PropertyExpert")
         assertEquals(allUsers[1].honor, 56832)
         assertEquals(allUsers[1].rank, 5)
+    }
+
+    @Test
+    fun given_ValidUserInDb_when_getByName_then_TheEntityIsRetrievedCorrectly() {
+        //  given
+        var user1 = UserEntity()
+        user1.clan = "Gensokyo"
+        user1.honor = 86057
+        user1.name = "Voile"
+        user1.rank = 3
+
+        var user2 = UserEntity()
+        user2.clan = "PropertyExpert"
+        user2.honor = 56832
+        user2.name = "smile67"
+        user2.rank = 5
+
+        //  when
+        userDao.insertAll(user1, user2)
+        val user = userDao.getByName("smile67")
+
+        //  then
+        assertNotNull(user)
+        assertEquals(user.name, "smile67")
+        assertEquals(user.clan, "PropertyExpert")
+        assertEquals(user.honor, 56832)
+        assertEquals(user.rank, 5)
     }
 }
