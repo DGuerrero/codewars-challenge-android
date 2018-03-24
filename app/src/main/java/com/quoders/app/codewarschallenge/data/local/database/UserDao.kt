@@ -16,8 +16,8 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg user: UserEntity)
 
-    @Query("SELECT * FROM users WHERE name = :arg0")
-    fun getByName(userName: String): Flowable<UserEntity>
+    @Query("SELECT * FROM users WHERE name = :userName")
+    fun getByName(userName: String): UserEntity
 
     @Delete
     fun delete(user: UserEntity)

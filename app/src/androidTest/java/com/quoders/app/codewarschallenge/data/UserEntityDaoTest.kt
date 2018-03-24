@@ -18,7 +18,7 @@ import org.junit.runner.RunWith
 import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
-class UserEntityReadWriteTest {
+class UserEntityDaoTest {
 
     lateinit var codewarsDatabase: CodewarsDatabase
     lateinit var userDao: UserDao

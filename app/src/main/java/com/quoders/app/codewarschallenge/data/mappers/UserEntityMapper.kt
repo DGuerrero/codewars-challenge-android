@@ -7,6 +7,6 @@ fun UserResponseToEntity(userResponse: UserResponse?) : UserEntity {
     val userEntity = UserEntity()
     userEntity.clan = userResponse?.clan
     userEntity.honor = userResponse!!.honor
-    userEntity.name = userResponse!!.name
+    userEntity.name = userResponse.username
     return userEntity
 }
