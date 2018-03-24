@@ -63,21 +63,14 @@ class UserEntityDaoTest {
 
         //  when
         userDao.insertAll(users[0], users[1])
-        val testSubscriber: TestSubscriber<UserEntity> = userDao.getByName("Voile")
-                .subscribeOn(Schedulers.single())
-                .test()
-                .awaitDone(5, TimeUnit.SECONDS)
 
         //  then
-        testSubscriber.assertNoErrors()
-        testSubscriber.assertSubscribed()
-        testSubscriber.onComplete()
-        val values = testSubscriber.values()[0]
-        assertEquals(values.name, "Voile")
-        assertEquals(values.clan, "Gensokyo")
-        assertEquals(values.honor, 86057)
-        testSubscriber.assertComplete()
-        testSubscriber.assertTerminated()
+        val user = userDao.getByName("Voile")
+
+        assertEquals(user.name, "Voile")
+        assertEquals(user.clan, "Gensokyo")
+        assertEquals(user.honor, 86057)
+        assertEquals(user.rank, 3)
     }
 
     private fun buildTwoValidUsers() : Array<UserEntity> {
