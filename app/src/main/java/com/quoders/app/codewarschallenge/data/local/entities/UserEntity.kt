@@ -17,5 +17,5 @@ class UserEntity {
     var clan: String? = null
 
     @ColumnInfo(name = "honor")
-    var honor: Int = 0
+    var honor: Long = 0
 }

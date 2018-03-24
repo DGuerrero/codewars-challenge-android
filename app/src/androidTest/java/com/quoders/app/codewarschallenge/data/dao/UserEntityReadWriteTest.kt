@@ -1,4 +1,4 @@
-package com.quoders.app.codewarschallenge
+package com.quoders.app.codewarschallenge.data.dao
 
 import android.arch.persistence.room.Room
 import android.content.Context
@@ -7,12 +7,15 @@ import android.support.test.runner.AndroidJUnit4
 import com.quoders.app.codewarschallenge.data.local.database.CodewarsDatabase
 import com.quoders.app.codewarschallenge.data.local.database.UserDao
 import com.quoders.app.codewarschallenge.data.local.entities.UserEntity
-import junit.framework.Assert.*
-
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subscribers.TestSubscriber
 import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
 class UserEntityReadWriteTest {
@@ -33,20 +36,10 @@ class UserEntityReadWriteTest {
     @Test
     fun given_TwoValidUsersEntities_when_AddedToDatabase_then_MustBeStoredAndRetrievedCorrectly() {
         //  given
-        var user1 = UserEntity()
-        user1.clan = "Gensokyo"
-        user1.honor = 86057
-        user1.name = "Voile"
-        user1.rank = 3
-
-        var user2 = UserEntity()
-        user2.clan = "PropertyExpert"
-        user2.honor = 56832
-        user2.name = "smile67"
-        user2.rank = 5
+        val users = buildTwoValidUsers()
 
         //  when
-        userDao.insertAll(user1, user2)
+        userDao.insertAll(users[0], users[1])
         val allUsers = userDao.getAll()
 
         //  then
@@ -66,6 +59,28 @@ class UserEntityReadWriteTest {
     @Test
     fun given_ValidUserInDb_when_getByName_then_TheEntityIsRetrievedCorrectly() {
         //  given
+        val users = buildTwoValidUsers()
+
+        //  when
+        userDao.insertAll(users[0], users[1])
+        val testSubscriber: TestSubscriber<UserEntity> = userDao.getByName("Voile")
+                .subscribeOn(Schedulers.single())
+                .test()
+                .awaitDone(5, TimeUnit.SECONDS)
+
+        //  then
+        testSubscriber.assertNoErrors()
+        testSubscriber.assertSubscribed()
+        testSubscriber.onComplete()
+        val values = testSubscriber.values()[0]
+        assertEquals(values.name, "Voile")
+        assertEquals(values.clan, "Gensokyo")
+        assertEquals(values.honor, 86057)
+        testSubscriber.assertComplete()
+        testSubscriber.assertTerminated()
+    }
+
+    private fun buildTwoValidUsers() : Array<UserEntity> {
         var user1 = UserEntity()
         user1.clan = "Gensokyo"
         user1.honor = 86057
@@ -78,15 +93,6 @@ class UserEntityReadWriteTest {
         user2.name = "smile67"
         user2.rank = 5
 
-        //  when
-        userDao.insertAll(user1, user2)
-        val user = userDao.getByName("smile67")
-
-        //  then
-        assertNotNull(user)
-        assertEquals(user.name, "smile67")
-        assertEquals(user.clan, "PropertyExpert")
-        assertEquals(user.honor, 56832)
-        assertEquals(user.rank, 5)
+        return arrayOf(user1, user2)
     }
 }

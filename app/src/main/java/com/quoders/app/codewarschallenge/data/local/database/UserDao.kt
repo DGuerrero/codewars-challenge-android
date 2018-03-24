@@ -17,7 +17,7 @@ interface UserDao {
     fun insertAll(vararg user: UserEntity)
 
     @Query("SELECT * FROM users WHERE name = :arg0")
-    fun getByName(userName: String): UserEntity
+    fun getByName(userName: String): Flowable<UserEntity>
 
     @Delete
     fun delete(user: UserEntity)
