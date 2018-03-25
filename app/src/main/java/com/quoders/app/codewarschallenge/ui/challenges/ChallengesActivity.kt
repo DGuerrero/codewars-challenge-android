@@ -3,7 +3,6 @@ package com.quoders.app.codewarschallenge.ui.challenges
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.annotation.StringRes
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.widget.ContentLoadingProgressBar
 import android.support.v7.app.AlertDialog
@@ -13,7 +12,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.quoders.app.codewarschallenge.CodewarsApplication
 import com.quoders.app.codewarschallenge.R
-import com.quoders.app.codewarschallenge.data.network.model.challenges.authored.DatumAuthored
 import com.quoders.app.codewarschallenge.data.network.model.challenges.completed.Datum
 import kotlinx.android.synthetic.main.activity_challenges.*
 import java.util.*
@@ -60,7 +58,7 @@ class ChallengesActivity : AppCompatActivity(), ChallengeCompletedClickListener,
         recyclerView = findViewById(R.id.recyclerViewChallengesPending)
         val challenges: List<Datum> = ArrayList()
         challengesCompletedAdapter = ChallengesCompletedAdapter(challenges, this)
-        val challengesAuthored: List<DatumAuthored> = ArrayList()
+        val challengesAuthored: List<com.quoders.app.codewarschallenge.data.network.model.challenges.authored.Datum> = ArrayList()
         challengesAuthoredAdapter = ChallengesAuthoredAdapter(challengesAuthored, this)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = challengesCompletedAdapter
@@ -75,24 +73,23 @@ class ChallengesActivity : AppCompatActivity(), ChallengeCompletedClickListener,
     }
 
     private fun observeChallengesAuthored() {
-        progressBar.show()
         challengesViewModel.challengesAuthored.observe(this, Observer {
-            challenges ->
-            when(challenges!!.datumAuthoreds) {
+            challenges -> challengesAuthoredAdapter.setItems(challenges!!.data)
+            /*when(challenges!!.datumAuthoreds) {
                 null -> displayErrorDialog(R.string.dialog_error_message_loading_challenges_authored)
                 else -> challengesAuthoredAdapter.setItems(challenges.datumAuthoreds)
-            }
+            }*/
             progressBar.hide()
         })
     }
 
     private fun observeChallengesCompleted() {
         challengesViewModel.challengesCompleted.observe(this, Observer {
-            challenges ->
-            when(challenges!!.data) {
+            challenges -> challengesCompletedAdapter.setItems(challenges!!.data)
+            /*when(challenges!!.data) {
                 null -> displayErrorDialog(R.string.dialog_error_message_loading_challenges_completed)
                 else -> challengesCompletedAdapter.setItems(challenges.data)
-            }
+            }*/
             progressBar.hide()
         })
     }
@@ -110,6 +107,6 @@ class ChallengesActivity : AppCompatActivity(), ChallengeCompletedClickListener,
     override fun onChallengeItemlClick(user: Datum) {
     }
 
-    override fun onChallengeItemlClick(user: DatumAuthored) {
+    override fun onChallengeItemlClick(user: com.quoders.app.codewarschallenge.data.network.model.challenges.authored.Datum) {
     }
 }

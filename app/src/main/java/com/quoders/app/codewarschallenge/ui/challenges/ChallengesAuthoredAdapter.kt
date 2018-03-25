@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 
 import com.quoders.app.codewarschallenge.R
-import com.quoders.app.codewarschallenge.data.network.model.challenges.authored.DatumAuthored
+import com.quoders.app.codewarschallenge.data.network.model.challenges.authored.Datum
 
-class ChallengesAuthoredAdapter(private var mValues: List<DatumAuthored>,
+class ChallengesAuthoredAdapter(private var mValues: List<Datum>,
                                 private val mListener: ChallengeAuthoredClickListener?)
     : RecyclerView.Adapter<ChallengesAuthoredAdapter.ViewHolder>() {
 
@@ -30,7 +30,7 @@ class ChallengesAuthoredAdapter(private var mValues: List<DatumAuthored>,
         }
     }
 
-    fun setItems(resultValues: List<DatumAuthored>?) {
+    fun setItems(resultValues: List<Datum>?) {
         mValues = resultValues!!
     }
 
@@ -42,6 +42,6 @@ class ChallengesAuthoredAdapter(private var mValues: List<DatumAuthored>,
         val mTvTitle: TextView = mView.findViewById(R.id.textViewChallengeTitle)
         val mTvSubtitle: TextView = mView.findViewById(R.id.textViewChallengeSubtitle)
         val mTvInfo: TextView = mView.findViewById(R.id.textViewChallengeInfo)
-        var mItem: DatumAuthored? = null
+        var mItem: Datum? = null
     }
 }

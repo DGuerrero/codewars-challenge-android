@@ -3,7 +3,7 @@ package com.quoders.app.codewarschallenge.data.network.model.challenges.authored
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class DatumAuthored {
+class Datum {
 
     @SerializedName("id")
     @Expose

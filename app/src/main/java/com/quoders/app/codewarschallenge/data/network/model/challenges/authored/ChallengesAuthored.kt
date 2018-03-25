@@ -5,7 +5,8 @@ import com.google.gson.annotations.SerializedName
 
 class ChallengesAuthored {
 
-    @SerializedName("datumAuthoreds")
+    @SerializedName("data")
     @Expose
-    var datumAuthoreds: List<DatumAuthored>? = null
+    var data: List<Datum>? = null
+
 }
