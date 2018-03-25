@@ -6,6 +6,7 @@ import com.quoders.app.codewarschallenge.data.local.database.UserDao
 import com.quoders.app.codewarschallenge.data.local.entities.UserEntity
 import com.quoders.app.codewarschallenge.data.mappers.UserResponseToEntity
 import com.quoders.app.codewarschallenge.data.network.api.CodewarsApiClient
+import com.quoders.app.codewarschallenge.data.network.model.challenges.completed.ChallengesCompleted
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -38,6 +39,7 @@ class UserRepository(val codewarsApiClient: CodewarsApiClient, val userDao: User
                 .doOnNext({ userEntity -> userDao.insertAll(userEntity)
                 })
     }
+
 
     fun getUsersSearch() : LiveData<List<UserEntity>> = userDao.getAllLive()
 }

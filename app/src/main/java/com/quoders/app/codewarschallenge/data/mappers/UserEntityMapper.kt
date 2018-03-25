@@ -1,7 +1,7 @@
 package com.quoders.app.codewarschallenge.data.mappers
 
 import com.quoders.app.codewarschallenge.data.local.entities.UserEntity
-import com.quoders.app.codewarschallenge.data.network.model.UserResponse
+import com.quoders.app.codewarschallenge.data.network.model.users.UserResponse
 
 fun UserResponseToEntity(userResponse: UserResponse?) : UserEntity {
     val userEntity = UserEntity()

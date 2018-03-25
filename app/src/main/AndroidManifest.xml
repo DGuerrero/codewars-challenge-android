@@ -20,6 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.challenges.ChallengesActivity"
+            android:label="@string/title_activity_challenges"></activity>
     </application>
 
 </manifest>

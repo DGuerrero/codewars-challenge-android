@@ -2,6 +2,7 @@ package com.quoders.app.codewarschallenge.ui.search
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -15,6 +16,7 @@ import android.widget.EditText
 import com.quoders.app.codewarschallenge.CodewarsApplication
 import com.quoders.app.codewarschallenge.R
 import com.quoders.app.codewarschallenge.data.local.entities.UserEntity
+import com.quoders.app.codewarschallenge.ui.challenges.ChallengesActivity
 import kotlinx.android.synthetic.main.activity_search.*
 import java.util.ArrayList
 
@@ -60,10 +62,6 @@ class SearchActivity : AppCompatActivity(), SearchContract.View, UserItemClickLi
         progressBar.visibility = GONE
     }
 
-    override fun showEmptySearchView() {
-
-    }
-
     override fun showUserNotFound() {
         val simpleAlert = AlertDialog.Builder(this).create()
         simpleAlert.setTitle(R.string.dialog_error)
@@ -74,17 +72,10 @@ class SearchActivity : AppCompatActivity(), SearchContract.View, UserItemClickLi
         simpleAlert.show()
     }
 
-    override fun showLastSearchView() {
-
-    }
-
-    override fun updateUsersSearchList(usersEntity: List<UserEntity>) {
-
-    }
-
     override fun observeUsersSearch(usersSearch: LiveData<List<UserEntity>>) {
         usersSearch.observe(this, Observer {
             users -> searchAdapter.setItems(users)
+            searchAdapter.notifyDataSetChanged()
         })
     }
 
@@ -92,7 +83,14 @@ class SearchActivity : AppCompatActivity(), SearchContract.View, UserItemClickLi
         presenter.onUserClicked(user)
     }
 
-    override fun launchChallengesView(userEntity: UserEntity) {
-
+    override fun launchChallengesView(user: UserEntity) {
+        val intent = Intent(this, ChallengesActivity::class.java)
+        intent.putExtra(ChallengesActivity.USER_NAME_INTENT_EXTRA, user.name)
+        startActivity(intent)
     }
+
+    override fun updateUsersSearchList(usersEntity: List<UserEntity>) {
+        searchAdapter.setItems(usersEntity)
+    }
+
 }

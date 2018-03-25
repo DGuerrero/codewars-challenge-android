@@ -2,7 +2,7 @@ package com.quoders.app.codewarschallenge.data.network.api
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import com.quoders.app.codewarschallenge.data.network.CodewarsApi
-import com.quoders.app.codewarschallenge.data.network.model.UserResponse
+import com.quoders.app.codewarschallenge.data.network.model.users.UserResponse
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

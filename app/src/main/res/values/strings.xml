@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">CodewarsChallenge</string>
+    <string name="app_name">Codewars Challenge</string>
     <string name="dialog_error">Error</string>
     <string name="user_not_found">User not found. Please try again with a different user name.</string>
+    <string name="title_activity_challenges">Challenges</string>
+    <string name="title_completed">Completed</string>
+    <string name="title_authored">Authored</string>
 </resources>

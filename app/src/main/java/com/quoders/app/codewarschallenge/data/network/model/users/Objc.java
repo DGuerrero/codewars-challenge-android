@@ -1,10 +1,10 @@
 
-package com.quoders.app.codewarschallenge.data.network.model;
+package com.quoders.app.codewarschallenge.data.network.model.users;
 
 import com.google.gson.annotations.SerializedName;
 
 @SuppressWarnings("unused")
-public class Overall {
+public class Objc {
 
     @SerializedName("color")
     private String Color;

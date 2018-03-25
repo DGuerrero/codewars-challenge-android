@@ -10,17 +10,13 @@ interface SearchContract {
 
         fun dismissProgressBar()
 
-        fun showEmptySearchView()
-
         fun showUserNotFound()
-
-        fun showLastSearchView()
 
         fun updateUsersSearchList(usersEntity: List<UserEntity>)
 
         fun observeUsersSearch(usersSearch: LiveData<List<UserEntity>>)
 
-        fun launchChallengesView(userEntity: UserEntity)
+        fun launchChallengesView(user: UserEntity)
     }
 
     interface Presenter {
@@ -29,6 +25,6 @@ interface SearchContract {
 
         fun onUsersSearchUpdate(usersEntity: List<UserEntity>)
 
-        fun onUserClicked(usersEntity: UserEntity)
+        fun onUserClicked(userEntity: UserEntity)
     }
 }
