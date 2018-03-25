@@ -1,5 +1,6 @@
 package com.quoders.app.codewarschallenge.data.local.database
 
+import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import com.quoders.app.codewarschallenge.data.local.entities.UserEntity
 import io.reactivex.Flowable
@@ -12,6 +13,9 @@ interface UserDao {
 
     @Query("SELECT * from users")
     fun getAllFlowable(): Flowable<UserEntity>
+
+    @Query("SELECT * from users")
+    fun getAllLive(): LiveData<List<UserEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg user: UserEntity)

@@ -1,5 +1,6 @@
 package com.quoders.app.codewarschallenge.data.repository
 
+import android.arch.lifecycle.LiveData
 import android.support.annotation.VisibleForTesting
 import com.quoders.app.codewarschallenge.data.local.database.UserDao
 import com.quoders.app.codewarschallenge.data.local.entities.UserEntity
@@ -34,6 +35,9 @@ class UserRepository(val codewarsApiClient: CodewarsApiClient, val userDao: User
         return codewarsApiClient.getUser(userName)
                 .subscribeOn(Schedulers.single())
                 .map({ userResponse -> UserResponseToEntity(userResponse) })
-                .doOnNext({ userEntity -> userDao.insertAll(userEntity) })
+                .doOnNext({ userEntity -> userDao.insertAll(userEntity)
+                })
     }
+
+    fun getUsersSearch() : LiveData<List<UserEntity>> = userDao.getAllLive()
 }
