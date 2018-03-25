@@ -22,11 +22,11 @@ import java.util.ArrayList
 
 class SearchActivity : AppCompatActivity(), SearchContract.View, UserItemClickListener {
 
-    lateinit var presenter: SearchContract.Presenter
-    lateinit var searchAdapter: SearchAdapter
-    lateinit var recyclerView: RecyclerView
-    lateinit var buttonSearch: Button
-    lateinit var etSearchName: EditText
+    private lateinit var presenter: SearchContract.Presenter
+    private lateinit var searchAdapter: SearchAdapter
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var buttonSearch: Button
+    private lateinit var etSearchName: EditText
     
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,9 +49,9 @@ class SearchActivity : AppCompatActivity(), SearchContract.View, UserItemClickLi
 
         val users: List<UserEntity> = ArrayList()
         searchAdapter = SearchAdapter(users, this)
-        recyclerView.setLayoutManager(LinearLayoutManager(this))
-        recyclerView.setAdapter(searchAdapter)
-        recyclerView.setItemAnimator(DefaultItemAnimator())
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = searchAdapter
+        recyclerView.itemAnimator = DefaultItemAnimator()
     }
 
     override fun showProgressBar() {

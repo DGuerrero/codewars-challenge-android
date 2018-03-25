@@ -8,5 +8,5 @@ import io.reactivex.Observable
 interface Repository {
     fun getUser(userName: String) : Observable<UserEntity>
 
-    //fun getChallengesCompleted(userName: String) : LiveData<List<ChallengesCompleted>>
+    fun getChallengesCompleted(userName: String) : LiveData<ChallengesCompleted>
 }

@@ -2,10 +2,12 @@ package com.quoders.app.codewarschallenge.data.network.api
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import com.quoders.app.codewarschallenge.data.network.CodewarsApi
+import com.quoders.app.codewarschallenge.data.network.model.challenges.completed.ChallengesCompleted
 import com.quoders.app.codewarschallenge.data.network.model.users.UserResponse
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -31,5 +33,9 @@ class CodewarsApiClient {
 
     fun getUser(userName: String) : Observable<UserResponse> {
         return codewarsApi.getUser(userName)
+    }
+
+    fun getChallenges(userName: String) : Call<ChallengesCompleted> {
+        return codewarsApi.getChallengesCompleted(userName)
     }
 }

@@ -10,6 +10,12 @@ import com.quoders.app.codewarschallenge.data.network.model.challenges.completed
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import android.arch.lifecycle.MutableLiveData
+import android.util.Log
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
 
 /**
  * NOTE: THIS IS A VERY SIMPLIFIED VERSION OF THE REPOSITORY PATTERN ONLY FOR CODE CHALLENGE PURPOSE
@@ -40,6 +46,21 @@ class UserRepository(val codewarsApiClient: CodewarsApiClient, val userDao: User
                 })
     }
 
-
     fun getUsersSearch() : LiveData<List<UserEntity>> = userDao.getAllLive()
+
+    override fun getChallengesCompleted(userName: String): LiveData<ChallengesCompleted> {
+        val data = MutableLiveData<ChallengesCompleted>()
+
+        codewarsApiClient.getChallenges(userName).enqueue(object : Callback<ChallengesCompleted> {
+            override fun onResponse(call: Call<ChallengesCompleted>, response: Response<ChallengesCompleted>) {
+                data.value = response.body()
+            }
+
+            override fun onFailure(call: Call<ChallengesCompleted>, t: Throwable) {
+                Log.i("", "")
+            }
+        })
+
+        return data
+    }
 }
