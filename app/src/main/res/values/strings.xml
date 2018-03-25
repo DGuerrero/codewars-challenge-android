@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Codewars Challenge</string>
-    <string name="dialog_error">Error</string>
-    <string name="user_not_found">User not found. Please try again with a different user name.</string>
+    <string name="dialog_error_title">Error</string>
+    <string name="dialog_error_message_user_not_found">User not found. Please try again with a different user name.</string>
+    <string name="dialog_error_message_loading_challenges_completed">Unable to load challenges completed. Please try again later.</string>
+    <string name="dialog_error_message_loading_challenges_authored">Unable to load challenges authored. Please try again later.</string>
     <string name="title_activity_challenges">Challenges</string>
     <string name="title_completed">Completed</string>
     <string name="title_authored">Authored</string>

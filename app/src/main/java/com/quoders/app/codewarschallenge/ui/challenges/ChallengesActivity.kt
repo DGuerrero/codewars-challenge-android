@@ -3,23 +3,27 @@ package com.quoders.app.codewarschallenge.ui.challenges
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.annotation.StringRes
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.widget.ContentLoadingProgressBar
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.quoders.app.codewarschallenge.CodewarsApplication
 import com.quoders.app.codewarschallenge.R
+import com.quoders.app.codewarschallenge.data.network.model.challenges.authored.DatumAuthored
 import com.quoders.app.codewarschallenge.data.network.model.challenges.completed.Datum
 import kotlinx.android.synthetic.main.activity_challenges.*
 import java.util.*
 
-class ChallengesActivity : AppCompatActivity(), ChallengeCompletedClickListener {
+class ChallengesActivity : AppCompatActivity(), ChallengeCompletedClickListener, ChallengeAuthoredClickListener {
 
     private lateinit var progressBar: ContentLoadingProgressBar
     private lateinit var recyclerView: RecyclerView
-    private lateinit var challengesAdapter: ChallengesCompletedAdapter
+    private lateinit var challengesCompletedAdapter: ChallengesCompletedAdapter
+    private lateinit var challengesAuthoredAdapter: ChallengesAuthoredAdapter
     lateinit var challengesViewModel: ChallengesViewModel
     lateinit var userName: String
 
@@ -39,11 +43,11 @@ class ChallengesActivity : AppCompatActivity(), ChallengeCompletedClickListener 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_challenges_authored -> {
-
+                recyclerView.adapter = challengesAuthoredAdapter
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_challenges_completed-> {
-
+                recyclerView.adapter = challengesCompletedAdapter
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -55,22 +59,57 @@ class ChallengesActivity : AppCompatActivity(), ChallengeCompletedClickListener 
         progressBar = findViewById(R.id.progressBar)
         recyclerView = findViewById(R.id.recyclerViewChallengesPending)
         val challenges: List<Datum> = ArrayList()
-        challengesAdapter = ChallengesCompletedAdapter(challenges, this)
+        challengesCompletedAdapter = ChallengesCompletedAdapter(challenges, this)
+        val challengesAuthored: List<DatumAuthored> = ArrayList()
+        challengesAuthoredAdapter = ChallengesAuthoredAdapter(challengesAuthored, this)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = challengesAdapter
+        recyclerView.adapter = challengesCompletedAdapter
         recyclerView.itemAnimator = DefaultItemAnimator()
     }
 
     private fun initViewModels(userName: String?) {
         challengesViewModel = ViewModelProviders.of(this).get(ChallengesViewModel::class.java)
         challengesViewModel.init(userName!!, (application as CodewarsApplication).repository)
-        challengesViewModel.challengesCompleted.observe(this, Observer {
-            challenges -> challengesAdapter.setItems(challenges?.data)
+        observeChallengesCompleted()
+        observeChallengesAuthored()
+    }
+
+    private fun observeChallengesAuthored() {
+        progressBar.show()
+        challengesViewModel.challengesAuthored.observe(this, Observer {
+            challenges ->
+            when(challenges!!.datumAuthoreds) {
+                null -> displayErrorDialog(R.string.dialog_error_message_loading_challenges_authored)
+                else -> challengesAuthoredAdapter.setItems(challenges.datumAuthoreds)
+            }
             progressBar.hide()
         })
     }
 
-    override fun onChallengeItemlClick(user: Datum) {
+    private fun observeChallengesCompleted() {
+        challengesViewModel.challengesCompleted.observe(this, Observer {
+            challenges ->
+            when(challenges!!.data) {
+                null -> displayErrorDialog(R.string.dialog_error_message_loading_challenges_completed)
+                else -> challengesCompletedAdapter.setItems(challenges.data)
+            }
+            progressBar.hide()
+        })
+    }
 
+    private fun displayErrorDialog(message: Int) {
+        val simpleAlert = AlertDialog.Builder(this).create()
+        simpleAlert.setTitle(R.string.dialog_error_title)
+        simpleAlert.setMessage(getString(message))
+        simpleAlert.setButton(AlertDialog.BUTTON_POSITIVE, "OK", {
+            _,_ ->
+        })
+        simpleAlert.show()
+    }
+
+    override fun onChallengeItemlClick(user: Datum) {
+    }
+
+    override fun onChallengeItemlClick(user: DatumAuthored) {
     }
 }

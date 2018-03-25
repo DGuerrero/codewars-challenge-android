@@ -64,8 +64,8 @@ class SearchActivity : AppCompatActivity(), SearchContract.View, UserItemClickLi
 
     override fun showUserNotFound() {
         val simpleAlert = AlertDialog.Builder(this).create()
-        simpleAlert.setTitle(R.string.dialog_error)
-        simpleAlert.setMessage(getString(R.string.user_not_found))
+        simpleAlert.setTitle(R.string.dialog_error_title)
+        simpleAlert.setMessage(getString(R.string.dialog_error_message_user_not_found))
         simpleAlert.setButton(AlertDialog.BUTTON_POSITIVE, "OK", {
             _,_ ->
         })

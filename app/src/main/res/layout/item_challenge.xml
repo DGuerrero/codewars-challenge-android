@@ -20,7 +20,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textViewChallengeName"
+            android:id="@+id/textViewChallengeTitle"
             android:layout_width="210dp"
             android:layout_height="22dp"
             android:layout_marginLeft="16dp"
@@ -33,7 +33,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textViewChallengeDate"
+            android:id="@+id/textViewChallengeInfo"
             android:layout_width="86dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -50,7 +50,7 @@
             app:layout_constraintVertical_bias="0.156" />
 
         <TextView
-            android:id="@+id/textViewChallengeSlug"
+            android:id="@+id/textViewChallengeSubtitle"
             android:layout_width="209dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"

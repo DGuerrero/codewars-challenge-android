@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 
 import com.quoders.app.codewarschallenge.R
-import com.quoders.app.codewarschallenge.data.network.model.challenges.completed.Datum
+import com.quoders.app.codewarschallenge.data.network.model.challenges.authored.DatumAuthored
 
-class ChallengesCompletedAdapter(private var mValues: List<Datum>,
-                                 private val mListener: ChallengeCompletedClickListener?)
-    : RecyclerView.Adapter<ChallengesCompletedAdapter.ViewHolder>() {
+class ChallengesAuthoredAdapter(private var mValues: List<DatumAuthored>,
+                                private val mListener: ChallengeAuthoredClickListener?)
+    : RecyclerView.Adapter<ChallengesAuthoredAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(
@@ -22,15 +22,15 @@ class ChallengesCompletedAdapter(private var mValues: List<Datum>,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.mItem = mValues[position]
         holder.mTvTitle.text = mValues[position].name
-        holder.mTvSubtitle.text = mValues[position].slug
-        holder.mTvInfo.text = mValues[position].completedAt
+        holder.mTvSubtitle.text = mValues[position].rankName
+        holder.mTvInfo.text = mValues[position].rank.toString()
 
         holder.mView.setOnClickListener { _ ->
             mListener?.onChallengeItemlClick(holder.mItem!!)
         }
     }
 
-    fun setItems(resultValues: List<Datum>?) {
+    fun setItems(resultValues: List<DatumAuthored>?) {
         mValues = resultValues!!
     }
 
@@ -42,6 +42,6 @@ class ChallengesCompletedAdapter(private var mValues: List<Datum>,
         val mTvTitle: TextView = mView.findViewById(R.id.textViewChallengeTitle)
         val mTvSubtitle: TextView = mView.findViewById(R.id.textViewChallengeSubtitle)
         val mTvInfo: TextView = mView.findViewById(R.id.textViewChallengeInfo)
-        var mItem: Datum? = null
+        var mItem: DatumAuthored? = null
     }
 }

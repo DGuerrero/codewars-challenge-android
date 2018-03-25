@@ -12,6 +12,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
+import com.quoders.app.codewarschallenge.data.network.model.challenges.authored.ChallengesAuthored
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -51,13 +52,29 @@ class UserRepository(val codewarsApiClient: CodewarsApiClient, val userDao: User
     override fun getChallengesCompleted(userName: String): LiveData<ChallengesCompleted> {
         val data = MutableLiveData<ChallengesCompleted>()
 
-        codewarsApiClient.getChallenges(userName).enqueue(object : Callback<ChallengesCompleted> {
+        codewarsApiClient.getChallengesCompleted(userName).enqueue(object : Callback<ChallengesCompleted> {
             override fun onResponse(call: Call<ChallengesCompleted>, response: Response<ChallengesCompleted>) {
                 data.value = response.body()
             }
 
             override fun onFailure(call: Call<ChallengesCompleted>, t: Throwable) {
-                Log.i("", "")
+                data.postValue(null)
+            }
+        })
+
+        return data
+    }
+
+    override fun getChallengesAuthored(userName: String): LiveData<ChallengesAuthored> {
+        val data = MutableLiveData<ChallengesAuthored>()
+
+        codewarsApiClient.getChallengesAuthored(userName).enqueue(object : Callback<ChallengesAuthored> {
+            override fun onResponse(call: Call<ChallengesAuthored>, response: Response<ChallengesAuthored>) {
+                data.value = response.body()
+            }
+
+            override fun onFailure(call: Call<ChallengesAuthored>, t: Throwable) {
+                data.postValue(null)
             }
         })
 
