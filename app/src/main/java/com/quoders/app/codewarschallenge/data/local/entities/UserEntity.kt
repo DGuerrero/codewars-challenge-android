@@ -11,11 +11,17 @@ class UserEntity {
     var name: String = ""
 
     @ColumnInfo(name = "rank")
-    var rank: Int = 0
+    var rank: Long = 0
 
     @ColumnInfo(name = "clan")
     var clan: String? = null
 
     @ColumnInfo(name = "honor")
     var honor: Long = 0
+
+    @ColumnInfo(name = "date_added")
+    var addedOn: Long = 0
+
+    @ColumnInfo(name = "leaderboardPosition")
+    var leaderboardPosition: Long = 0
 }

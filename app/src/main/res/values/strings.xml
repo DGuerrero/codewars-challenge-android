@@ -7,4 +7,6 @@
     <string name="title_activity_challenges">Challenges</string>
     <string name="title_completed">Completed</string>
     <string name="title_authored">Authored</string>
+    <string name="dialog_error_message_generic">Something wrong happened. Please try again.</string>
+    <string name="empty_challenges">No challenges found</string>
 </resources>

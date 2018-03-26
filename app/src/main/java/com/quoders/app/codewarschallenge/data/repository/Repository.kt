@@ -10,6 +10,8 @@ interface Repository {
 
     fun getUser(userName: String) : Observable<UserEntity>
 
+    fun getAllUsers() : Observable<List<UserEntity>>
+
     fun getChallengesCompleted(userName: String) : LiveData<ChallengesCompleted>
 
     fun getChallengesAuthored(userName: String) : LiveData<ChallengesAuthored>

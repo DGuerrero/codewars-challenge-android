@@ -1,4 +1,4 @@
-package com.quoders.app.codewarschallenge.domain.users
+package com.quoders.app.codewarschallenge.domain
 
 import com.quoders.app.codewarschallenge.data.local.entities.UserEntity
 import com.quoders.app.codewarschallenge.data.repository.UserRepository

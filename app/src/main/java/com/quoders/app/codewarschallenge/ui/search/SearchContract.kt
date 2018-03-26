@@ -17,6 +17,8 @@ interface SearchContract {
         fun observeUsersSearch(usersSearch: LiveData<List<UserEntity>>)
 
         fun launchChallengesView(user: UserEntity)
+
+        fun showGenericError()
     }
 
     interface Presenter {
@@ -26,5 +28,7 @@ interface SearchContract {
         fun onUsersSearchUpdate(usersEntity: List<UserEntity>)
 
         fun onUserClicked(userEntity: UserEntity)
+
+        fun onOrderByRankClick()
     }
 }

@@ -12,7 +12,7 @@ interface UserDao {
     fun getAll(): List<UserEntity>
 
     @Query("SELECT * from users")
-    fun getAllFlowable(): Flowable<UserEntity>
+    fun getAllFlowable(): Flowable<List<UserEntity>>
 
     @Query("SELECT * from users")
     fun getAllLive(): LiveData<List<UserEntity>>

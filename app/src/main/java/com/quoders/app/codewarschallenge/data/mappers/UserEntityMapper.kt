@@ -8,5 +8,7 @@ fun UserResponseToEntity(userResponse: UserResponse?) : UserEntity {
     userEntity.clan = userResponse?.clan
     userEntity.honor = userResponse!!.honor
     userEntity.name = userResponse.username
+    userEntity.rank = userResponse.ranks.overall.rank
+    userEntity.leaderboardPosition = userResponse.leaderboardPosition
     return userEntity
 }

@@ -2,7 +2,6 @@ package com.quoders.app.codewarschallenge.data.repository
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import android.support.annotation.VisibleForTesting
 import com.quoders.app.codewarschallenge.data.local.database.UserDao
 import com.quoders.app.codewarschallenge.data.local.entities.UserEntity
 import com.quoders.app.codewarschallenge.data.mappers.UserResponseToEntity
@@ -15,6 +14,7 @@ import io.reactivex.schedulers.Schedulers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 
 /**
@@ -28,8 +28,12 @@ class UserRepository(val codewarsApiClient: CodewarsApiClient, val userDao: User
     override fun getUser(userName: String): Observable<UserEntity> =
             getUserFromLocalDb(userName).onErrorReturn({ getUserFromApi(userName).blockingFirst() })
 
+    override fun getAllUsers(): Observable<List<UserEntity>> {
+        return userDao.getAllFlowable().toObservable()
+    }
 
-    @VisibleForTesting
+    fun getUsersSearch() : LiveData<List<UserEntity>> = userDao.getAllLive()
+
     fun getUserFromLocalDb(userName: String): Observable<UserEntity> {
         return Observable.fromCallable(
                 { userDao.getByName(userName) })
@@ -37,16 +41,15 @@ class UserRepository(val codewarsApiClient: CodewarsApiClient, val userDao: User
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
-    @VisibleForTesting
     fun getUserFromApi(userName: String): Observable<UserEntity> {
         return codewarsApiClient.getUser(userName)
                 .subscribeOn(Schedulers.single())
                 .map({ userResponse -> UserResponseToEntity(userResponse) })
-                .doOnNext({ userEntity -> userDao.insertAll(userEntity)
+                .doOnNext({ userEntity ->
+                    userEntity.addedOn = Calendar.getInstance().timeInMillis
+                    userDao.insertAll(userEntity)
                 })
     }
-
-    fun getUsersSearch() : LiveData<List<UserEntity>> = userDao.getAllLive()
 
     override fun getChallengesCompleted(userName: String): LiveData<ChallengesCompleted> {
         val data = MutableLiveData<ChallengesCompleted>()

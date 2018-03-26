@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.DialogTitle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View.GONE
@@ -22,10 +23,13 @@ import java.util.ArrayList
 
 class SearchActivity : AppCompatActivity(), SearchContract.View, UserItemClickListener {
 
+    private val MAX_ITEMS_TO_DISPLAY: Int = 5
+
     private lateinit var presenter: SearchContract.Presenter
     private lateinit var searchAdapter: SearchAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var buttonSearch: Button
+    private lateinit var buttonOrderByRank: Button
     private lateinit var etSearchName: EditText
     
 
@@ -46,6 +50,8 @@ class SearchActivity : AppCompatActivity(), SearchContract.View, UserItemClickLi
         recyclerView = findViewById(R.id.recyclerViewSearchResult)
         buttonSearch = findViewById(R.id.buttonSearch)
         buttonSearch.setOnClickListener({ presenter.onSearchForUser(etSearchName.text.toString()) })
+        buttonOrderByRank = findViewById(R.id.buttonSearchOrderByRank)
+        buttonOrderByRank.setOnClickListener({ presenter.onOrderByRankClick() })
 
         val users: List<UserEntity> = ArrayList()
         searchAdapter = SearchAdapter(users, this)
@@ -63,18 +69,19 @@ class SearchActivity : AppCompatActivity(), SearchContract.View, UserItemClickLi
     }
 
     override fun showUserNotFound() {
-        val simpleAlert = AlertDialog.Builder(this).create()
-        simpleAlert.setTitle(R.string.dialog_error_title)
-        simpleAlert.setMessage(getString(R.string.dialog_error_message_user_not_found))
-        simpleAlert.setButton(AlertDialog.BUTTON_POSITIVE, "OK", {
-            _,_ ->
-        })
-        simpleAlert.show()
+        showAlertDialog(R.string.dialog_error_title, R.string.dialog_error_message_user_not_found)
+    }
+
+    override fun showGenericError() {
+        showAlertDialog(R.string.dialog_error_title, R.string.dialog_error_message_generic)
     }
 
     override fun observeUsersSearch(usersSearch: LiveData<List<UserEntity>>) {
         usersSearch.observe(this, Observer {
-            users -> searchAdapter.setItems(users)
+            users ->
+            searchAdapter.setItems(users?.sortedByDescending {
+                userEntity -> userEntity.addedOn }?.take(MAX_ITEMS_TO_DISPLAY))
+
             searchAdapter.notifyDataSetChanged()
         })
     }
@@ -91,6 +98,16 @@ class SearchActivity : AppCompatActivity(), SearchContract.View, UserItemClickLi
 
     override fun updateUsersSearchList(usersEntity: List<UserEntity>) {
         searchAdapter.setItems(usersEntity)
+        searchAdapter.notifyDataSetChanged()
     }
 
+    private fun showAlertDialog(title: Int, message: Int) {
+        val simpleAlert = AlertDialog.Builder(this).create()
+        simpleAlert.setTitle(title)
+        simpleAlert.setMessage(getString(message))
+        simpleAlert.setButton(AlertDialog.BUTTON_POSITIVE, "OK", {
+            _,_ ->
+        })
+        simpleAlert.show()
+    }
 }
