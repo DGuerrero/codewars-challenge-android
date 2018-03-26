@@ -3,15 +3,12 @@ package com.quoders.app.codewarschallenge.ui.challenges
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
-import android.opengl.Visibility
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.support.v4.widget.ContentLoadingProgressBar
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.TextView
@@ -24,9 +21,6 @@ import java.util.*
 
 class ChallengesActivity : AppCompatActivity(), ChallengeCompletedClickListener, ChallengeAuthoredClickListener {
 
-    private lateinit var progressBar: ContentLoadingProgressBar
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var tvNoChallengesView: TextView
     private lateinit var challengesCompletedAdapter: ChallengesCompletedAdapter
     private lateinit var challengesAuthoredAdapter: ChallengesAuthoredAdapter
     private lateinit var challengesViewModel: ChallengesViewModel
@@ -48,12 +42,12 @@ class ChallengesActivity : AppCompatActivity(), ChallengeCompletedClickListener,
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_challenges_authored -> {
-                recyclerView.adapter = challengesAuthoredAdapter
+                recyclerViewChallenges.adapter = challengesAuthoredAdapter
                 setNoChallengesVisibility(challengesAuthoredAdapter.itemCount)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_challenges_completed-> {
-                recyclerView.adapter = challengesCompletedAdapter
+                recyclerViewChallenges.adapter = challengesCompletedAdapter
                 setNoChallengesVisibility(challengesCompletedAdapter.itemCount)
                 return@OnNavigationItemSelectedListener true
             }
@@ -63,23 +57,20 @@ class ChallengesActivity : AppCompatActivity(), ChallengeCompletedClickListener,
 
     private fun setNoChallengesVisibility(itemCount: Int) {
         when (itemCount) {
-            0 -> tvNoChallengesView.visibility = VISIBLE
-            else -> tvNoChallengesView.visibility = GONE
+            0 -> textViewEmptyChallenges.visibility = VISIBLE
+            else -> textViewEmptyChallenges.visibility = GONE
         }
     }
 
     private fun initWidgets() {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        progressBar = findViewById(R.id.progressBar)
-        recyclerView = findViewById(R.id.recyclerViewChallengesPending)
-        tvNoChallengesView = findViewById(R.id.textViewEmptyChallenges)
         val challenges: List<Datum> = ArrayList()
         challengesCompletedAdapter = ChallengesCompletedAdapter(challenges, this)
         val challengesAuthored: List<com.quoders.app.codewarschallenge.data.network.model.challenges.authored.Datum> = ArrayList()
         challengesAuthoredAdapter = ChallengesAuthoredAdapter(challengesAuthored, this)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = challengesCompletedAdapter
-        recyclerView.itemAnimator = DefaultItemAnimator()
+        recyclerViewChallenges.layoutManager = LinearLayoutManager(this)
+        recyclerViewChallenges.adapter = challengesCompletedAdapter
+        recyclerViewChallenges.itemAnimator = DefaultItemAnimator()
     }
 
     private fun initViewModel(userName: String?) {

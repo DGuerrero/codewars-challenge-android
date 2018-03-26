@@ -8,7 +8,7 @@
     tools:context="com.quoders.app.codewarschallenge.ui.challenges.ChallengesActivity">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerViewChallengesPending"
+        android:id="@+id/recyclerViewChallenges"
         android:layout_width="match_parent"
         android:layout_height="442dp"
         android:layout_marginBottom="8dp"

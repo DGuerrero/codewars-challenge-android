@@ -27,11 +27,6 @@ class SearchActivity : AppCompatActivity(), SearchContract.View, UserItemClickLi
 
     private lateinit var presenter: SearchContract.Presenter
     private lateinit var searchAdapter: SearchAdapter
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var buttonSearch: Button
-    private lateinit var buttonOrderByRank: Button
-    private lateinit var etSearchName: EditText
-    
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,18 +41,14 @@ class SearchActivity : AppCompatActivity(), SearchContract.View, UserItemClickLi
     }
 
     private fun initWidgets() {
-        etSearchName = findViewById(R.id.editTextSearchName)
-        recyclerView = findViewById(R.id.recyclerViewSearchResult)
-        buttonSearch = findViewById(R.id.buttonSearch)
-        buttonSearch.setOnClickListener({ presenter.onSearchForUser(etSearchName.text.toString()) })
-        buttonOrderByRank = findViewById(R.id.buttonSearchOrderByRank)
-        buttonOrderByRank.setOnClickListener({ presenter.onOrderByRankClick() })
+        buttonSearch.setOnClickListener({ presenter.onSearchForUser(editTextSearchName.text.toString()) })
+        buttonSearchOrderByRank.setOnClickListener({ presenter.onOrderByRankClick() })
 
         val users: List<UserEntity> = ArrayList()
         searchAdapter = SearchAdapter(users, this)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = searchAdapter
-        recyclerView.itemAnimator = DefaultItemAnimator()
+        recyclerViewSearchResult.layoutManager = LinearLayoutManager(this)
+        recyclerViewSearchResult.adapter = searchAdapter
+        recyclerViewSearchResult.itemAnimator = DefaultItemAnimator()
     }
 
     override fun showProgressBar() {
