@@ -2,6 +2,7 @@ package com.quoders.app.codewarschallenge.ui.challenges
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.opengl.Visibility
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
@@ -17,6 +18,7 @@ import android.widget.TextView
 import com.quoders.app.codewarschallenge.CodewarsApplication
 import com.quoders.app.codewarschallenge.R
 import com.quoders.app.codewarschallenge.data.network.model.challenges.completed.Datum
+import com.quoders.app.codewarschallenge.ui.detail.ChallengeDetailActivity
 import kotlinx.android.synthetic.main.activity_challenges.*
 import java.util.*
 
@@ -125,9 +127,15 @@ class ChallengesActivity : AppCompatActivity(), ChallengeCompletedClickListener,
         simpleAlert.show()
     }
 
-    override fun onChallengeItemlClick(user: Datum) {
+    override fun onChallengeItemlClick(challenge: Datum) {
+        val intent = Intent(this, ChallengeDetailActivity::class.java)
+        intent.putExtra(ChallengeDetailActivity.INTENT_EXTRA_CHALLENGE_COMPLETED, challenge)
+        startActivity(intent)
     }
 
-    override fun onChallengeItemlClick(user: com.quoders.app.codewarschallenge.data.network.model.challenges.authored.Datum) {
+    override fun onChallengeItemlClick(challenge: com.quoders.app.codewarschallenge.data.network.model.challenges.authored.Datum) {
+        val intent = Intent(this, ChallengeDetailActivity::class.java)
+        intent.putExtra(ChallengeDetailActivity.INTENT_EXTRA_CHALLENGE_AUTHORED, challenge)
+        startActivity(intent)
     }
 }

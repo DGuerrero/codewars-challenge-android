@@ -5,6 +5,7 @@
     <string name="dialog_error_message_loading_challenges_completed">Unable to load challenges completed. Please try again later.</string>
     <string name="dialog_error_message_loading_challenges_authored">Unable to load challenges authored. Please try again later.</string>
     <string name="title_activity_challenges">Challenges</string>
+    <string name="title_activity_challenge_detail">Challenge Detail</string>
     <string name="title_completed">Completed</string>
     <string name="title_authored">Authored</string>
     <string name="dialog_error_message_generic">Something wrong happened. Please try again.</string>
