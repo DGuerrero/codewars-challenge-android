@@ -23,7 +23,7 @@ import java.util.*
  *  Right now we look into the database to find the data, if not found retrieve from backend and save in the DB
  *  But there is no refresh mechanism in place. Ideally we could implement a time based refresh functionality or/and by demand
  */
-class UserRepository(val codewarsApiClient: CodewarsApiClient, val userDao: UserDao) : Repository {
+open class UserRepository(val codewarsApiClient: CodewarsApiClient, val userDao: UserDao) : Repository {
 
     override fun getUser(userName: String): Observable<UserEntity> =
             getUserFromLocalDb(userName).onErrorReturn({ getUserFromApi(userName).blockingFirst() })

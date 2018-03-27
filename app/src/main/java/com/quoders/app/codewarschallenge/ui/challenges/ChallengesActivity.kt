@@ -110,6 +110,7 @@ class ChallengesActivity : AppCompatActivity(),
     private fun observeChallengesAuthored() {
         challengesViewModel.challengesAuthored.observe(this, Observer {
             challenges ->
+            setNoChallengesVisibility(challenges?.data?.size!!)
             progressBar.hide()
             when(challenges?.data) {
                 null -> displayErrorDialog(R.string.dialog_error_message_loading_challenges_authored)
@@ -122,6 +123,7 @@ class ChallengesActivity : AppCompatActivity(),
         challengesViewModel.challengesCompleted.observeForever({
             challenges ->
             progressBar.hide()
+            setNoChallengesVisibility(challenges?.data?.size!!)
             when(challenges?.data) {
                 null -> displayErrorDialog(R.string.dialog_error_message_loading_challenges_completed)
                 else -> challengesCompletedAdapter.addItems(challenges.data!!)
