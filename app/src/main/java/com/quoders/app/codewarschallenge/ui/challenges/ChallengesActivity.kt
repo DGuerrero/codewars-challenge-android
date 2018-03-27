@@ -11,7 +11,7 @@ import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.TextView
+import android.widget.Toast
 import com.quoders.app.codewarschallenge.CodewarsApplication
 import com.quoders.app.codewarschallenge.R
 import com.quoders.app.codewarschallenge.data.network.model.challenges.completed.Datum
@@ -19,7 +19,8 @@ import com.quoders.app.codewarschallenge.ui.detail.ChallengeDetailActivity
 import kotlinx.android.synthetic.main.activity_challenges.*
 import java.util.*
 
-class ChallengesActivity : AppCompatActivity(), ChallengeCompletedClickListener, ChallengeAuthoredClickListener {
+class ChallengesActivity : AppCompatActivity(),
+        ChallengeCompletedClickListener, ChallengeAuthoredClickListener {
 
     private lateinit var challengesCompletedAdapter: ChallengesCompletedAdapter
     private lateinit var challengesAuthoredAdapter: ChallengesAuthoredAdapter
@@ -64,13 +65,39 @@ class ChallengesActivity : AppCompatActivity(), ChallengeCompletedClickListener,
 
     private fun initWidgets() {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        val challenges: List<Datum> = ArrayList()
-        challengesCompletedAdapter = ChallengesCompletedAdapter(challenges, this)
-        val challengesAuthored: List<com.quoders.app.codewarschallenge.data.network.model.challenges.authored.Datum> = ArrayList()
-        challengesAuthoredAdapter = ChallengesAuthoredAdapter(challengesAuthored, this)
+        initialiseCompletedAdapter()
+        initialiseAuthoredAdapter()
+        initialiseRecyclerView()
+    }
+
+    private fun initialiseRecyclerView() {
         recyclerViewChallenges.layoutManager = LinearLayoutManager(this)
         recyclerViewChallenges.adapter = challengesCompletedAdapter
         recyclerViewChallenges.itemAnimator = DefaultItemAnimator()
+    }
+
+    private fun initialiseAuthoredAdapter() {
+        val challengesAuthored: List<com.quoders.app.codewarschallenge.data.network.model.challenges.authored.Datum> = ArrayList()
+        challengesAuthoredAdapter = ChallengesAuthoredAdapter(challengesAuthored, this)
+    }
+
+    private fun initialiseCompletedAdapter() {
+        val challenges: MutableList<Datum> = ArrayList()
+        challengesCompletedAdapter = ChallengesCompletedAdapter(challenges, this)
+        challengesCompletedAdapter.setEndOfListListener(object : OnEndOfListListener {
+            override fun onEndOfListView(position: Int) {
+                requestMoreChallenges()
+            }
+        })
+    }
+
+    private fun requestMoreChallenges() {
+        if(!challengesViewModel.getNextChallengeCompletedPage()) {
+            Toast.makeText(this, R.string.toast_no_more_challenges, Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(this, R.string.toast_loading_challenges, Toast.LENGTH_SHORT).show()
+            progressBar.show()
+        }
     }
 
     private fun initViewModel(userName: String?) {
@@ -83,28 +110,22 @@ class ChallengesActivity : AppCompatActivity(), ChallengeCompletedClickListener,
     private fun observeChallengesAuthored() {
         challengesViewModel.challengesAuthored.observe(this, Observer {
             challenges ->
+            progressBar.hide()
             when(challenges?.data) {
                 null -> displayErrorDialog(R.string.dialog_error_message_loading_challenges_authored)
-                else -> {
-                    challengesAuthoredAdapter.setItems(challenges.data)
-                    challengesAuthoredAdapter.notifyDataSetChanged()
-                }
+                else -> challengesAuthoredAdapter.setItems(challenges.data)
             }
-            progressBar.hide()
         })
     }
 
     private fun observeChallengesCompleted() {
-        challengesViewModel.challengesCompleted.observe(this, Observer {
+        challengesViewModel.challengesCompleted.observeForever({
             challenges ->
+            progressBar.hide()
             when(challenges?.data) {
                 null -> displayErrorDialog(R.string.dialog_error_message_loading_challenges_completed)
-                else -> {
-                    challengesCompletedAdapter.setItems(challenges.data)
-                    challengesCompletedAdapter.notifyDataSetChanged()
-                }
+                else -> challengesCompletedAdapter.addItems(challenges.data!!)
             }
-            progressBar.hide()
         })
     }
 

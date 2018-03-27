@@ -36,8 +36,12 @@ class CodewarsApiClient {
         return codewarsApi.getUser(userName)
     }
 
-    fun getChallengesCompleted(userName: String) : Call<ChallengesCompleted> {
-        return codewarsApi.getChallengesCompleted(userName)
+    fun getChallengesCompletedObservable(userName: String, pageNumber: Int) : Observable<ChallengesCompleted> {
+        return codewarsApi.getChallengesCompletedObservable(userName, pageNumber)
+    }
+
+    fun getChallengesCompleted(userName: String, pageNumber: Int) : Call<ChallengesCompleted> {
+        return codewarsApi.getChallengesCompleted(userName, pageNumber)
     }
 
     fun getChallengesAuthored(userName: String) : Call<ChallengesAuthored> {

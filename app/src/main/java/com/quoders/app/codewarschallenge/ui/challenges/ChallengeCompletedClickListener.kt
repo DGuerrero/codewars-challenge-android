@@ -3,5 +3,5 @@ package com.quoders.app.codewarschallenge.ui.challenges
 import com.quoders.app.codewarschallenge.data.network.model.challenges.completed.Datum
 
 interface ChallengeCompletedClickListener {
-    fun onChallengeItemlClick(user: Datum)
+    fun onChallengeItemlClick(challenge: Datum)
 }

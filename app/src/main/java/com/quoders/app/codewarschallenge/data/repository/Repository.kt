@@ -12,7 +12,7 @@ interface Repository {
 
     fun getAllUsers() : Observable<List<UserEntity>>
 
-    fun getChallengesCompleted(userName: String) : LiveData<ChallengesCompleted>
+    fun getChallengesCompleted(userName: String, pageNumber: Int) : LiveData<ChallengesCompleted>
 
     fun getChallengesAuthored(userName: String) : LiveData<ChallengesAuthored>
 }

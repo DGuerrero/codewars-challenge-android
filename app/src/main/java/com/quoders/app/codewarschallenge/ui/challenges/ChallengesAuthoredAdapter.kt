@@ -32,6 +32,7 @@ class ChallengesAuthoredAdapter(private var mValues: List<Datum>,
 
     fun setItems(resultValues: List<Datum>?) {
         mValues = resultValues!!
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {

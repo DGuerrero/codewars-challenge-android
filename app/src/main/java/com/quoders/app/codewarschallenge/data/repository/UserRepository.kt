@@ -20,8 +20,8 @@ import java.util.*
 /**
  * NOTE: THIS IS A VERY SIMPLIFIED VERSION OF THE REPOSITORY PATTERN ONLY FOR CODE CHALLENGE PURPOSE
  *
- * In case we have the user requested in the local database we retrieve it from there,
- * otherwise we make a request to the backend and then store in the database
+ *  Right now we look into the database to find the data, if not found retrieve from backend and save in the DB
+ *  But there is no refresh mechanism in place. Ideally we could implement a time based refresh functionality or/and by demand
  */
 class UserRepository(val codewarsApiClient: CodewarsApiClient, val userDao: UserDao) : Repository {
 
@@ -51,10 +51,15 @@ class UserRepository(val codewarsApiClient: CodewarsApiClient, val userDao: User
                 })
     }
 
-    override fun getChallengesCompleted(userName: String): LiveData<ChallengesCompleted> {
+    fun getChallengesCompletedObservable(userName: String, pageNumber: Int): Observable<ChallengesCompleted> {
+        return codewarsApiClient.getChallengesCompletedObservable(userName, pageNumber)
+                .subscribeOn(Schedulers.single())
+    }
+
+    override fun getChallengesCompleted(userName: String, pageNumber: Int): MutableLiveData<ChallengesCompleted> {
         val data = MutableLiveData<ChallengesCompleted>()
 
-        codewarsApiClient.getChallengesCompleted(userName).enqueue(object : Callback<ChallengesCompleted> {
+        codewarsApiClient.getChallengesCompleted(userName, pageNumber).enqueue(object : Callback<ChallengesCompleted> {
             override fun onResponse(call: Call<ChallengesCompleted>, response: Response<ChallengesCompleted>) {
                 data.value = response.body()
             }
@@ -67,7 +72,7 @@ class UserRepository(val codewarsApiClient: CodewarsApiClient, val userDao: User
         return data
     }
 
-    override fun getChallengesAuthored(userName: String): LiveData<ChallengesAuthored> {
+    override fun getChallengesAuthored(userName: String): MutableLiveData<ChallengesAuthored> {
         val data = MutableLiveData<ChallengesAuthored>()
 
         codewarsApiClient.getChallengesAuthored(userName).enqueue(object : Callback<ChallengesAuthored> {

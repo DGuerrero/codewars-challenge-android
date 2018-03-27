@@ -10,4 +10,7 @@
     <string name="title_authored">Authored</string>
     <string name="dialog_error_message_generic">Something wrong happened. Please try again.</string>
     <string name="empty_challenges">No challenges found</string>
+    <string name="toast_loading_challenges">Loading more challenges</string>
+    <string name="toast_no_more_challenges">No more challenges available</string>
+    <string name="search_empty">Looking a bit empty here.\nTap on Search to start adding users</string>
 </resources>
