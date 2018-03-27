@@ -8,9 +8,10 @@
     <string name="title_activity_challenge_detail">Challenge Detail</string>
     <string name="title_completed">Completed</string>
     <string name="title_authored">Authored</string>
+    <string name="title_order_by_rank">Rank</string>
     <string name="dialog_error_message_generic">Something wrong happened. Please try again.</string>
     <string name="empty_challenges">No challenges found</string>
     <string name="toast_loading_challenges">Loading more challenges</string>
     <string name="toast_no_more_challenges">No more challenges available</string>
-    <string name="search_empty">Looking a bit empty here.\nTap on Search to start adding users</string>
+    <string name="search_empty">Looking a bit empty here.\nLet\'s try to search some users...</string>
 </resources>

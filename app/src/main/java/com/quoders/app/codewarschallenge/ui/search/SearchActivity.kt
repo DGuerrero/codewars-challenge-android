@@ -7,19 +7,17 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.DialogTitle
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.Button
-import android.widget.EditText
 import com.quoders.app.codewarschallenge.CodewarsApplication
 import com.quoders.app.codewarschallenge.R
 import com.quoders.app.codewarschallenge.data.local.entities.UserEntity
 import com.quoders.app.codewarschallenge.ui.challenges.ChallengesActivity
 import kotlinx.android.synthetic.main.activity_search.*
-import java.util.ArrayList
+import java.util.*
 
 class SearchActivity : AppCompatActivity(), SearchContract.View, UserItemClickListener {
 
@@ -42,7 +40,6 @@ class SearchActivity : AppCompatActivity(), SearchContract.View, UserItemClickLi
 
     private fun initWidgets() {
         buttonSearch.setOnClickListener({ presenter.onSearchForUser(editTextSearchName.text.toString()) })
-        buttonSearchOrderByRank.setOnClickListener({ presenter.onOrderByRankClick() })
 
         val users: List<UserEntity> = ArrayList()
         searchAdapter = SearchAdapter(users, this)
@@ -72,9 +69,15 @@ class SearchActivity : AppCompatActivity(), SearchContract.View, UserItemClickLi
             users ->
             searchAdapter.setItems(users?.sortedByDescending {
                 userEntity -> userEntity.addedOn }?.take(MAX_ITEMS_TO_DISPLAY))
-
-            searchAdapter.notifyDataSetChanged()
+            showUsersListView(users)
         })
+    }
+
+    private fun showUsersListView(users: List<UserEntity>?) {
+        if(users?.isEmpty() == false) {
+            recyclerViewSearchResult.visibility = VISIBLE
+            linearLayoutEmptySearch.visibility = GONE
+        }
     }
 
     override fun onUserItemlClick(user: UserEntity) {
@@ -89,7 +92,7 @@ class SearchActivity : AppCompatActivity(), SearchContract.View, UserItemClickLi
 
     override fun updateUsersSearchList(usersEntity: List<UserEntity>) {
         searchAdapter.setItems(usersEntity)
-        searchAdapter.notifyDataSetChanged()
+        showUsersListView(usersEntity)
     }
 
     private fun showAlertDialog(title: Int, message: Int) {
@@ -100,5 +103,20 @@ class SearchActivity : AppCompatActivity(), SearchContract.View, UserItemClickLi
             _,_ ->
         })
         simpleAlert.show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.order_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.action_order_rank) {
+            presenter.onOrderByRankClick()
+            return true
+        } else {
+            super.onOptionsItemSelected(item)
+        }
+        return false
     }
 }

@@ -34,23 +34,6 @@ class UserRepository(val codewarsApiClient: CodewarsApiClient, val userDao: User
 
     fun getUsersSearch() : LiveData<List<UserEntity>> = userDao.getAllLive()
 
-    fun getUserFromLocalDb(userName: String): Observable<UserEntity> {
-        return Observable.fromCallable(
-                { userDao.getByName(userName) })
-                .subscribeOn(Schedulers.single())
-                .observeOn(AndroidSchedulers.mainThread())
-    }
-
-    fun getUserFromApi(userName: String): Observable<UserEntity> {
-        return codewarsApiClient.getUser(userName)
-                .subscribeOn(Schedulers.single())
-                .map({ userResponse -> UserResponseToEntity(userResponse) })
-                .doOnNext({ userEntity ->
-                    userEntity.addedOn = Calendar.getInstance().timeInMillis
-                    userDao.insertAll(userEntity)
-                })
-    }
-
     fun getChallengesCompletedObservable(userName: String, pageNumber: Int): Observable<ChallengesCompleted> {
         return codewarsApiClient.getChallengesCompletedObservable(userName, pageNumber)
                 .subscribeOn(Schedulers.single())
@@ -86,5 +69,22 @@ class UserRepository(val codewarsApiClient: CodewarsApiClient, val userDao: User
         })
 
         return data
+    }
+
+    private fun getUserFromLocalDb(userName: String): Observable<UserEntity> {
+        return Observable.fromCallable(
+                { userDao.getByName(userName) })
+                .subscribeOn(Schedulers.single())
+                .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    private fun getUserFromApi(userName: String): Observable<UserEntity> {
+        return codewarsApiClient.getUser(userName)
+                .subscribeOn(Schedulers.single())
+                .map({ userResponse -> UserResponseToEntity(userResponse) })
+                .doOnNext({ userEntity ->
+                    userEntity.addedOn = Calendar.getInstance().timeInMillis
+                    userDao.insertAll(userEntity)
+                })
     }
 }

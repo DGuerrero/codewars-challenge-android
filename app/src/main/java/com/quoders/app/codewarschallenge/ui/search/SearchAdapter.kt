@@ -32,6 +32,7 @@ class SearchAdapter(private var mValues: List<UserEntity>, private val mListener
 
     fun setItems(resultValues: List<UserEntity>?) {
         mValues = resultValues!!
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
